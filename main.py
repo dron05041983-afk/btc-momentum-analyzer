@@ -13,7 +13,7 @@ LIMIT = 500
 client = Client(API_KEY, API_SECRET)
 
 def get_klines():
-"""Получаем данные с Binance"""
+    """Получаем данные с Binance"""
     candles = client.get_klines(symbol=SYMBOL, interval=INTERVAL, limit=LIMIT)
     df = pd.DataFrame(candles, columns=[
         'Open time', 'Open', 'High', 'Low', 'Close', 'Volume',
