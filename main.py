@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 import time
 import pandas as pd
 from binance.client import Client
 
-# --- Настройки Binance ---
+# --- Binance Settings ---
 API_KEY = "ТВОЙ_API_KEY"
 API_SECRET = "ТВОЙ_API_SECRET"
 SYMBOL = "BTCUSDT"
@@ -11,8 +12,7 @@ LIMIT = 500
 
 client = Client(API_KEY, API_SECRET)
 
-def get_klines():
-    """Получаем данные с Binance"""
+"""Get data from Binance"""
     candles = client.get_klines(symbol=SYMBOL, interval=INTERVAL, limit=LIMIT)
     df = pd.DataFrame(candles, columns=[
         'Open time', 'Open', 'High', 'Low', 'Close', 'Volume',
@@ -22,8 +22,7 @@ def get_klines():
     df['Close'] = df['Close'].astype(float)
     return df
 
-def calculate_rsi(prices, period=14):
-    """RSI расчёт"""
+"""RSI calculation"""
     delta = prices.diff()
     gain = (delta.where(delta > 0, 0)).rolling(window=period).mean()
     loss = (-delta.where(delta < 0, 0)).rolling(window=period).mean()
