@@ -13,7 +13,7 @@ LIMIT = 500
 client = Client(API_KEY, API_SECRET)
 
 def get_klines():
-    """Получаем данные с Binance"""
+    """Get data from Binance"""
     candles = client.get_klines(symbol=SYMBOL, interval=INTERVAL, limit=LIMIT)
     df = pd.DataFrame(candles, columns=[
         'Open time', 'Open', 'High', 'Low', 'Close', 'Volume',
@@ -24,7 +24,7 @@ def get_klines():
     return df
 
 def calculate_rsi(prices, period=14):
-    """Расчёт RSI"""
+    """RSI calculation"""
     delta = prices.diff()
     gain = (delta.where(delta > 0, 0)).rolling(window=period).mean()
     loss = (-delta.where(delta < 0, 0)).rolling(window=period).mean()
@@ -32,23 +32,23 @@ def calculate_rsi(prices, period=14):
     return 100 - (100 / (1 + rs))
 
 def analyze_momentum():
-    """Основная логика анализа"""
+    """Main momentum analyzer"""
     df = get_klines()
     df['RSI'] = calculate_rsi(df['Close'])
     last_rsi = df['RSI'].iloc[-1]
     last_close = df['Close'].iloc[-1]
 
     if last_rsi > 70:
-        signal = "⚠️ RSI перегрет — возможен откат вниз"
+        signal = "RSI overheated — possible correction down."
     elif last_rsi < 30:
-        signal = "✅ RSI перепродан — возможен импульс вверх"
+        signal = "RSI oversold — possible impulse up."
     else:
-        signal = "ℹ️ Нейтральная зона"
+        signal = "Neutral zone."
 
     print(f"\n=== BTC Momentum Analyzer ===")
-    print(f"Цена: {last_close:.2f} USDT")
+    print(f"Price: {last_close:.2f} USDT")
     print(f"RSI: {last_rsi:.2f}")
-    print(f"Сигнал: {signal}\n")
+    print(f"Signal: {signal}\n")
 
 if __name__ == "__main__":
     while True:
