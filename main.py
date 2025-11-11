@@ -2,10 +2,11 @@
 import time
 import pandas as pd
 from binance.client import Client
+from datetime import datetime
 
 # --- Binance Settings ---
-API_KEY = "ТВОЙ_API_KEY"
-API_SECRET = "ТВОЙ_API_SECRET"
+API_KEY = "YOUR_API_KEY"
+API_SECRET = "YOUR_API_SECRET"
 SYMBOL = "BTCUSDT"
 INTERVAL = "5m"
 LIMIT = 500
@@ -41,14 +42,16 @@ def analyze_momentum():
     if last_rsi > 70:
         signal = "RSI overheated — possible correction down."
     elif last_rsi < 30:
-        signal = "RSI oversold — possible impulse up."
+        signal = "RSI oversold — possible upward impulse."
     else:
         signal = "Neutral zone."
 
-    print(f"\n=== BTC Momentum Analyzer ===")
+    print("\n=== BTC Momentum Analyzer ===")
+    print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"Price: {last_close:.2f} USDT")
     print(f"RSI: {last_rsi:.2f}")
-    print(f"Signal: {signal}\n")
+    print(f"Signal: {signal}")
+    print("==============================\n")
 
 if __name__ == "__main__":
     while True:
